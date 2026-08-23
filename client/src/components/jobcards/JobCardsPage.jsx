@@ -94,7 +94,7 @@ export default function JobCardsPage({
             boxShadow: activeView === 'job-cards' ? '0 2px 8px rgba(37, 99, 235, 0.3)' : 'none'
           }}
         >
-          <Wrench size={15} /> Job Cards Directory
+          <Wrench size={15} /> {t('job_cards.title')}
         </button>
 
         <button
@@ -117,7 +117,7 @@ export default function JobCardsPage({
             boxShadow: activeView === 'master-schedule' ? '0 2px 8px rgba(37, 99, 235, 0.3)' : 'none'
           }}
         >
-          <Calendar size={15} /> Master Schedule
+          <Calendar size={15} /> {t('nav.schedule')}
         </button>
       </div>
 
@@ -137,49 +137,49 @@ export default function JobCardsPage({
             {/* Tile 1: Active In-Progress */}
             <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '10px 12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>Active In-Progress</span>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>{t('dashboard.active_work_orders')}</span>
                 <div style={{ background: 'rgba(139, 92, 246, 0.15)', padding: '5px', borderRadius: '6px', color: '#8b5cf6' }}>
                   <Clock size={16} />
                 </div>
               </div>
               <div style={{ fontSize: '18px', fontWeight: '800', color: '#8b5cf6' }}>{inProgressCount}</div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>Under Technician Service</div>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>{t('status.IN_PROGRESS')}</div>
             </div>
 
             {/* Tile 2: Inspection / QC Gate */}
             <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '10px 12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>Inspection & QC Gate</span>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>{t('status.QC_PENDING')}</span>
                 <div style={{ background: 'rgba(245, 158, 11, 0.15)', padding: '5px', borderRadius: '6px', color: '#d97706' }}>
                   <FileText size={16} />
                 </div>
               </div>
               <div style={{ fontSize: '18px', fontWeight: '800', color: '#d97706' }}>{pendingQcCount}</div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>Awaiting QC Inspection Pass</div>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>{t('status.INSPECTED')}</div>
             </div>
 
             {/* Tile 3: Completed & Delivered */}
             <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '10px 12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>Completed & Delivered</span>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>{t('status.DELIVERED')}</span>
                 <div style={{ background: 'rgba(52, 211, 153, 0.15)', padding: '5px', borderRadius: '6px', color: '#059669' }}>
                   <CheckCircle2 size={16} />
                 </div>
               </div>
               <div style={{ fontSize: '18px', fontWeight: '800', color: '#059669' }}>{completedCount}</div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>QC Passed & Handed Over</div>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>{t('status.QC_PASSED')}</div>
             </div>
 
             {/* Tile 4: Available Slot Capacity / Remaining Vehicles in Slots */}
             <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '10px 12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>Remaining Vehicles in Slots</span>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase' }}>{t('dashboard.workshop_capacity')}</span>
                 <div style={{ background: 'rgba(56, 189, 248, 0.15)', padding: '5px', borderRadius: '6px', color: '#0284c7' }}>
                   <Car size={16} />
                 </div>
               </div>
               <div style={{ fontSize: '18px', fontWeight: '800', color: '#0284c7' }}>{remainingSlotsCount}</div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>Open Slot Capacity Today</div>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', fontWeight: '600' }}>{t('dashboard.bay_utilization')}</div>
             </div>
           </div>
 
@@ -197,7 +197,7 @@ export default function JobCardsPage({
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search plate, customer, card #..."
+                  placeholder={t('actions.search')}
                   value={searchQuery}
                   onChange={e => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                   style={{ paddingLeft: '36px', width: '100%', height: '40px', fontSize: '13px' }}
@@ -211,16 +211,16 @@ export default function JobCardsPage({
                 style={{ flex: '1 1 35%', minWidth: 0, height: '40px', fontSize: '12px' }}
               >
                 <option value="ALL">All Lifecycle Statuses</option>
-                <option value="CHECKED_IN">CHECKED_IN (Step 1)</option>
-                <option value="INSPECTED">INSPECTED (Step 2)</option>
-                <option value="ESTIMATE_APPROVED">ESTIMATE_APPROVED (Step 2)</option>
-                <option value="ASSIGNED">ASSIGNED (Step 3)</option>
-                <option value="IN_PROGRESS">IN_PROGRESS (Step 4)</option>
-                <option value="UNFINISHED">UNFINISHED (Draft / Hold)</option>
-                <option value="QC_PASSED">QC_PASSED (Step 5)</option>
-                <option value="INVOICED">INVOICED (Step 6)</option>
-                <option value="PAID">PAID (Step 6)</option>
-                <option value="DELIVERED">DELIVERED (Step 7)</option>
+                <option value="CHECKED_IN">{getStatusLabel('CHECKED_IN')}</option>
+                <option value="INSPECTED">{getStatusLabel('INSPECTED')}</option>
+                <option value="ESTIMATE_APPROVED">{getStatusLabel('ESTIMATE_APPROVED')}</option>
+                <option value="ASSIGNED">{getStatusLabel('ASSIGNED')}</option>
+                <option value="IN_PROGRESS">{getStatusLabel('IN_PROGRESS')}</option>
+                <option value="QC_PENDING">{getStatusLabel('QC_PENDING')}</option>
+                <option value="QC_PASSED">{getStatusLabel('QC_PASSED')}</option>
+                <option value="INVOICED">{getStatusLabel('INVOICED')}</option>
+                <option value="PAID">{getStatusLabel('PAID')}</option>
+                <option value="DELIVERED">{getStatusLabel('DELIVERED')}</option>
               </select>
             </div>
           </div>
@@ -230,13 +230,13 @@ export default function JobCardsPage({
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>Job Card #</th>
-                  <th>Vehicle / Plate</th>
-                  <th>Customer</th>
-                  <th>Technician</th>
-                  <th>Status</th>
-                  <th>Total Cost (₹)</th>
-                  <th>Actions</th>
+                  <th>{t('job_cards.card_number')}</th>
+                  <th>{t('job_cards.vehicle')}</th>
+                  <th>{t('job_cards.customer')}</th>
+                  <th>{t('job_cards.technician')}</th>
+                  <th>{t('job_cards.status')}</th>
+                  <th>{t('job_cards.total_cost')}</th>
+                  <th>{t('job_cards.action')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,15 +259,15 @@ export default function JobCardsPage({
                       </td>
                       <td>
                         <span className={`badge badge-${card.status?.toLowerCase()}`}>
-                          {card.status}
+                          {getStatusLabel(card.status)}
                         </span>
                       </td>
                       <td style={{ fontWeight: '800', color: '#34d399' }}>
-                        ₹{card.totalCost?.toFixed(2) || '0.00'}
+                        {formatCurrency(card.totalCost)}
                       </td>
                       <td>
                         <button className="btn btn-secondary btn-sm" onClick={() => onSelectJobCard(card)}>
-                          <Eye size={14} /> Open Console
+                          <Eye size={14} /> {t('actions.view_details')}
                         </button>
                       </td>
                     </tr>
@@ -275,7 +275,7 @@ export default function JobCardsPage({
                 ) : (
                   <tr>
                     <td colSpan="7" style={{ textAlign: 'center', padding: '32px', color: '#64748b' }}>
-                      No job cards found matching the criteria.
+                      {t('job_cards.no_cards')}
                     </td>
                   </tr>
                 )}
@@ -311,7 +311,7 @@ export default function JobCardsPage({
                       </span>
                     </div>
                     <span className={`badge badge-${card.status?.toLowerCase()}`} style={{ fontSize: '10px', padding: '2px 6px', flexShrink: 0 }}>
-                      {card.status}
+                      {getStatusLabel(card.status)}
                     </span>
                   </div>
 
@@ -330,7 +330,7 @@ export default function JobCardsPage({
                         🔧 {card.technician?.name || 'Unassigned'}
                       </span>
                       <span style={{ fontWeight: '800', color: '#059669', fontSize: '13px' }}>
-                        ₹{card.totalCost?.toFixed(2) || '0.00'}
+                        {formatCurrency(card.totalCost)}
                       </span>
                     </div>
                   </div>
@@ -342,14 +342,14 @@ export default function JobCardsPage({
                       onClick={(e) => { e.stopPropagation(); onSelectJobCard(card); }}
                       style={{ width: '100%', minHeight: '34px', justifyContent: 'center', fontSize: '12px', fontWeight: '700' }}
                     >
-                      <Eye size={14} /> Open Workstation Console
+                      <Eye size={14} /> {t('actions.view_details')}
                     </button>
                   </div>
                 </div>
               ))
             ) : (
               <div style={{ textAlign: 'center', padding: '32px', color: '#64748b', background: '#1e293b', borderRadius: '10px' }}>
-                No job cards found matching the criteria.
+                {t('job_cards.no_cards')}
               </div>
             )}
           </div>

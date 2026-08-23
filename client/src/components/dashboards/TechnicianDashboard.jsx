@@ -352,7 +352,7 @@ export default function TechnicianDashboard({
             </h3>
             <div style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               <span>Vehicle: <strong style={{ color: 'var(--text-main)' }}>{nextUpCard.vehicle?.make} {nextUpCard.vehicle?.model} ({nextUpCard.vehicle?.licensePlate || 'No Plate'})</strong></span>
-              <span className={`badge badge-${nextUpCard.status?.toLowerCase()}`}>{nextUpCard.status}</span>
+              <span className={`badge badge-${nextUpCard.status?.toLowerCase()}`}>{getStatusLabel(nextUpCard.status)}</span>
               <span className="badge" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#dc2626', border: '1px solid #ef4444' }}>
                 ⚡ {nextUpCard.priority}
               </span>
@@ -516,7 +516,7 @@ export default function TechnicianDashboard({
                       <td style={{ fontWeight: '800', color: '#60a5fa' }}>{card.cardNumber}</td>
                       <td>{card.vehicle?.make} {card.vehicle?.model} ({card.vehicle?.licensePlate})</td>
                       <td>{card.customer?.name}</td>
-                      <td><span className={`badge badge-${card.status?.toLowerCase()}`}>{card.status}</span></td>
+                      <td><span className={`badge badge-${card.status?.toLowerCase()}`}>{getStatusLabel(card.status)}</span></td>
                       <td>
                         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                           {card.status !== 'IN_PROGRESS' && card.status !== 'QC_PASSED' && (
@@ -577,7 +577,7 @@ export default function TechnicianDashboard({
                       </span>
                     </div>
                     <span className={`badge badge-${card.status?.toLowerCase()}`} style={{ fontSize: '10px', padding: '2px 6px', flexShrink: 0 }}>
-                      {card.status}
+                      {getStatusLabel(card.status)}
                     </span>
                   </div>
 
@@ -710,7 +710,7 @@ export default function TechnicianDashboard({
                               <td style={{ fontWeight: '800', color: 'var(--text-main)' }}>{r.hoursWorked} hrs</td>
                               <td>
                                 <span className={`badge badge-${r.status?.toLowerCase()}`}>
-                                  {r.status}
+                                  {getStatusLabel(r.status)}
                                 </span>
                               </td>
                             </tr>
@@ -747,7 +747,7 @@ export default function TechnicianDashboard({
                               <td style={{ fontWeight: '800', color: '#2563eb' }}>#{j.cardNumber}</td>
                               <td>{j.vehicle?.make} {j.vehicle?.model} ({j.vehicle?.licensePlate})</td>
                               <td>{j.customer?.name}</td>
-                              <td><span className={`badge badge-${j.status?.toLowerCase()}`}>{j.status}</span></td>
+                              <td><span className={`badge badge-${j.status?.toLowerCase()}`}>{getStatusLabel(j.status)}</span></td>
                             </tr>
                           ))}
                         </tbody>
