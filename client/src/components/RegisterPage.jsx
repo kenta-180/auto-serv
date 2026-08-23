@@ -212,10 +212,10 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
         {/* Brand Header */}
         <div style={{ textAlign: 'center', marginBottom: '8px' }}>
           <h1 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
-            Create New Account
+            {t('auth.register_title')}
           </h1>
           <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '1px', margin: 0, fontWeight: '600' }}>
-            Self-service portal registration with Mobile OTP Verification.
+            {t('auth.register_subtitle')}
           </p>
         </div>
 
@@ -249,7 +249,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
               transition: 'all 0.2s ease'
             }}
           >
-            <GraduationCap size={14} /> Customer Account
+            <GraduationCap size={14} /> {t('auth.customer')}
           </button>
 
           <button
@@ -271,7 +271,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
               transition: 'all 0.2s ease'
             }}
           >
-            <Shield size={14} /> Workshop Admin
+            <Shield size={14} /> {t('auth.admin')}
           </button>
         </div>
 
@@ -322,7 +322,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           {/* Full Name */}
           <div style={{ marginBottom: '6px' }}>
             <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-              Full Name *
+              {t('auth.full_name')} *
             </label>
             <div style={{ position: 'relative' }}>
               <User size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -341,7 +341,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           {/* Email Address */}
           <div style={{ marginBottom: '6px' }}>
             <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-              Email Address *
+              {t('auth.email_phone')} *
             </label>
             <div style={{ position: 'relative' }}>
               <Mail size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -360,7 +360,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           {/* Mobile Phone & OTP - Exact Same Placement */}
           <div style={{ marginBottom: '6px' }}>
             <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-              Mobile Phone * {otpVerified && <span style={{ color: '#059669', marginLeft: '4px' }}>✓ Verified</span>}
+              {t('auth.phone')} * {otpVerified && <span style={{ color: '#059669', marginLeft: '4px' }}>✓ {t('auth.verified')}</span>}
             </label>
             <div style={{ display: 'flex', gap: '6px' }}>
               <div style={{ position: 'relative', flex: 1 }}>
@@ -408,7 +408,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
                   }}
                 >
                   <Send size={12} />
-                  {otpLoading ? '...' : timer > 0 ? `${timer}s` : otpSent ? 'Resend' : 'Send OTP'}
+                  {otpLoading ? '...' : timer > 0 ? `${timer}s` : otpSent ? 'Resend' : t('auth.send_otp')}
                 </button>
               )}
             </div>
@@ -469,7 +469,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
                     background: '#2563eb'
                   }}
                 >
-                  {otpLoading ? '...' : 'Verify'}
+                  {otpLoading ? '...' : t('auth.verify')}
                 </button>
               </div>
             </div>
@@ -479,7 +479,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           {selectedRole === 'ADMIN' ? (
             <div style={{ marginBottom: '6px' }}>
               <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-                Workshop Name
+                {t('auth.workshop_name')}
               </label>
               <div style={{ position: 'relative' }}>
                 <Building size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -496,7 +496,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           ) : (
             <div style={{ marginBottom: '6px' }}>
               <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-                Vehicle Info (Plate Number)
+                {t('auth.vehicle_info')}
               </label>
               <div style={{ position: 'relative' }}>
                 <Car size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -516,7 +516,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-                Password *
+                {t('auth.password')} *
               </label>
               <div style={{ position: 'relative' }}>
                 <Lock size={13} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -534,7 +534,7 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
 
             <div>
               <label style={{ display: 'block', fontSize: '10px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '2px', textTransform: 'uppercase' }}>
-                Confirm Password *
+                {t('auth.confirm_password')} *
               </label>
               <div style={{ position: 'relative' }}>
                 <Lock size={13} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
@@ -565,9 +565,9 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
               boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)'
             }}
           >
-            {loading ? 'Registering...' : !otpVerified ? 'Verify Mobile Number to Continue' : (
+            {loading ? '...' : !otpVerified ? 'Verify Mobile Number to Continue' : (
               <>
-                Register as {selectedRole === 'ADMIN' ? 'Workshop Administrator' : 'Customer'} <ArrowRight size={14} />
+                {t('auth.register_btn')} <ArrowRight size={14} />
               </>
             )}
           </button>
@@ -575,13 +575,13 @@ export default function RegisterPage({ onRegisterSuccess, onSwitchToLogin }) {
 
         {/* Footer Link to Sign In - Exact Same Placement */}
         <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid var(--border-color)', textAlign: 'center', fontSize: '11px', color: 'var(--text-muted)' }}>
-          Already have an account?{' '}
+          {t('auth.have_account')}{' '}
           <button
             type="button"
             onClick={onSwitchToLogin}
             style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '800', cursor: 'pointer', textDecoration: 'underline' }}
           >
-            Sign In Here
+            {t('auth.sign_in_here')}
           </button>
         </div>
       </div>

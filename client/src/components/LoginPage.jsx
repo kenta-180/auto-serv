@@ -118,10 +118,10 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
             <Car size={22} />
           </div>
           <h1 style={{ fontSize: '19px', fontWeight: '800', letterSpacing: '-0.02em', margin: '0 0 2px 0', color: 'var(--text-main)' }}>
-            Auto-Serv Workshop
+            {t('auth.login_title')}
           </h1>
           <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: 0, fontWeight: '600' }}>
-            Automobile Workshop Operations Portal
+            {t('auth.login_subtitle')}
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
           marginBottom: '12px'
         }}>
           <div style={{ fontSize: '10px', fontWeight: '800', color: '#2563eb', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px', textAlign: 'center' }}>
-            ⚡ Instant 1-Click Role Login
+            {t('auth.quick_login')}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
             <button
@@ -159,7 +159,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                 boxShadow: '0 4px 10px rgba(37, 99, 235, 0.3)'
               }}
             >
-              <Shield size={13} /> Admin
+              <Shield size={13} /> {t('auth.admin')}
             </button>
             <button
               type="button"
@@ -183,7 +183,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                 boxShadow: '0 4px 10px rgba(13, 148, 136, 0.3)'
               }}
             >
-              <Wrench size={13} /> Tech
+              <Wrench size={13} /> {t('auth.tech')}
             </button>
             <button
               type="button"
@@ -207,7 +207,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                 boxShadow: '0 4px 10px rgba(124, 58, 237, 0.3)'
               }}
             >
-              <Car size={13} /> Customer
+              <Car size={13} /> {t('auth.customer')}
             </button>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               color: selectedRole === 'ADMIN' ? '#fff' : 'var(--text-muted)'
             }}
           >
-            <Shield size={13} /> Admin
+            <Shield size={13} /> {t('auth.admin')}
           </button>
 
           <button
@@ -264,7 +264,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               color: selectedRole === 'TECHNICIAN' ? '#fff' : 'var(--text-muted)'
             }}
           >
-            <Wrench size={13} /> Tech
+            <Wrench size={13} /> {t('auth.tech')}
           </button>
 
           <button
@@ -286,7 +286,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               color: selectedRole === 'CUSTOMER' ? '#fff' : 'var(--text-muted)'
             }}
           >
-            <Car size={13} /> Customer
+            <Car size={13} /> {t('auth.customer')}
           </button>
         </div>
 
@@ -314,7 +314,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
           {/* Identifier Input */}
           <div style={{ marginBottom: '10px' }}>
             <label style={{ display: 'block', fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '3px' }}>
-              Email or Staff/Student ID
+              {t('auth.email_phone')}
             </label>
             <div style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}>
@@ -342,14 +342,14 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
           <div style={{ marginBottom: '10px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
               <label style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
-                Password
+                {t('auth.password')}
               </label>
               <button
                 type="button"
                 onClick={() => setShowForgotModal(true)}
                 style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '11px', fontWeight: '700', cursor: 'pointer', padding: 0 }}
               >
-                Forgot password?
+                {t('auth.forgot_password')}
               </button>
             </div>
             <div style={{ position: 'relative' }}>
@@ -401,7 +401,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 style={{ accentColor: '#2563eb', width: '14px', height: '14px', cursor: 'pointer' }}
               />
-              Remember me / Keep session active
+              {t('auth.remember_me')}
             </label>
           </div>
 
@@ -437,11 +437,11 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite'
                 }} />
-                Authenticating...
+                {t('auth.authenticating')}
               </>
             ) : (
               <>
-                Sign In <ArrowRight size={15} />
+                {t('auth.login_btn')} <ArrowRight size={15} />
               </>
             )}
           </button>
@@ -449,13 +449,13 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
 
         {/* Footer Note & Sign Up Link */}
         <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-color)', textAlign: 'center', fontSize: '11px', color: 'var(--text-muted)' }}>
-          Don't have an account?{' '}
+          {t('auth.no_account')}{' '}
           <button
             type="button"
             onClick={onSwitchToRegister}
             style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '800', cursor: 'pointer', textDecoration: 'underline' }}
           >
-            Create New Account (Customer / Admin)
+            {t('auth.create_new_account_link')}
           </button>
         </div>
       </div>
