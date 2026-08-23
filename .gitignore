@@ -1,0 +1,9 @@
+node_modules
+.env
+.DS_Store
+dist
+build
+.system_generated
+.idea
+.agents
+*.log

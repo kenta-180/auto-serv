@@ -1,0 +1,142 @@
+{
+  "app_name": "AUTO-SERV",
+  "portal_title": "Workshop Portal",
+  "sign_out": "Sign Out",
+  "notifications": "Notifications",
+  "mark_all_read": "Mark all read",
+  "no_notifications": "No notifications available.",
+
+  "nav": {
+    "dashboard": "Dashboard",
+    "job_cards": "Job Cards",
+    "inventory": "Inventory",
+    "reports": "Reports",
+    "users": "User Management",
+    "assigned_jobs": "Assigned Job Cards",
+    "inventory_parts": "Inventory & Parts",
+    "book_service": "Book Service",
+    "my_service_history": "My Service History",
+    "my_fees_receipts": "My Fee & Receipts"
+  },
+
+  "status": {
+    "CHECKED_IN": "Checked In",
+    "INSPECTED": "Inspected",
+    "ESTIMATE_APPROVED": "Estimate Approved",
+    "ASSIGNED": "Assigned to Tech",
+    "IN_PROGRESS": "In Repair Work",
+    "QC_PENDING": "QC Pending",
+    "QC_FAILED": "QC Failed",
+    "QC_PASSED": "QC Passed",
+    "INVOICED": "Invoiced",
+    "PAID": "Settled & Paid",
+    "DELIVERED": "Vehicle Delivered",
+
+    "PRESENT": "Present",
+    "LATE": "Late",
+    "ABSENT": "Absent",
+    "ON_LEAVE": "On Leave"
+  },
+
+  "actions": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "submit": "Submit",
+    "filter": "Filter",
+    "search": "Search...",
+    "download_pdf": "Download PDF Invoice",
+    "pay_now": "Pay Digital Invoice",
+    "create_job_card": "Create New Job Card",
+    "add_inventory_item": "Add Inventory SKU",
+    "compare_months": "Compare Months",
+    "clock_in": "Clock In Shift",
+    "clock_out": "Clock Out Shift",
+    "add_technician": "Add Technician",
+    "view_history": "Completed Vehicle History",
+    "attendance_roster": "Technician Attendance Roster",
+    "view_details": "View Order Details",
+    "edit": "Edit",
+    "delete": "Delete",
+    "checkout_parts": "Checkout Parts",
+    "approve_estimate": "Approve Estimate"
+  },
+
+  "dashboard": {
+    "total_revenue": "Total Settled Revenue",
+    "active_work_orders": "Active Repair Orders",
+    "low_stock_alerts": "Low Stock SKU Alerts",
+    "completion_rate": "Service Completion Rate",
+    "pending_invoices": "Pending Invoiced Revenue",
+    "stock_valuation": "Stock Valuation",
+    "recent_job_cards": "Recent Job Card Orders",
+    "quick_actions": "Quick Managerial Operations",
+    "workshop_capacity": "Workshop Capacity & Utilization",
+    "bay_utilization": "Active Bay Utilization",
+    "turnaround_time": "Avg Turnaround Time",
+    "tech_workload": "Tech Workload Distribution",
+    "welcome_admin": "Workshop Executive Dashboard",
+    "admin_subtitle": "Real-time workshop operational metrics, revenue, inventory alerts, and technician throughput.",
+    "welcome_tech": "Technician Repair Workstation",
+    "tech_subtitle": "View assigned job cards, draw inventory parts, log active repair hours, and update QC progress.",
+    "welcome_customer": "Customer Service & History Portal",
+    "customer_subtitle": "Track ongoing vehicle repairs, view technician inspection photos, approve estimates, and download receipts."
+  },
+
+  "job_cards": {
+    "title": "Workshop Job Cards",
+    "subtitle": "Manage vehicle check-ins, estimate approvals, technician assignments, and digital billing.",
+    "card_number": "Job Card #",
+    "vehicle": "Vehicle Details",
+    "customer": "Customer",
+    "technician": "Assigned Technician",
+    "priority": "Priority",
+    "total_cost": "Total Billed",
+    "status": "Status",
+    "action": "Action",
+    "no_cards": "No job cards found."
+  },
+
+  "inventory": {
+    "title": "Inventory & Stock Management",
+    "subtitle": "Track spare parts, lubricant stock levels, SKU pricing, and automated reorder alerts.",
+    "stock_valuation": "Stock Valuation",
+    "total_skus": "Total SKU Items",
+    "fast_moving": "Fast-Moving Stock",
+    "service_parts": "Service Parts",
+    "low_stock_count": "Low-Stock Alerts",
+    "adjust_stock": "Adjust Quantity",
+    "category": "Item Category",
+    "unit_price": "Unit Price (₹)",
+    "sku": "SKU Code",
+    "name": "Part Name",
+    "quantity": "Quantity on Hand",
+    "min_stock": "Minimum Reorder Level",
+    "part_type": "Classification Type"
+  },
+
+  "reports": {
+    "title": "Executive Reports & Business Analytics",
+    "subtitle": "Filtered metrics for financial throughput, inventory valuation, and technician performance.",
+    "executive_analytics": "Executive Reports & Business Analytics",
+    "revenue_trend": "Revenue Trends",
+    "labor_vs_parts": "Labor vs Parts Billing",
+    "throughput": "Vehicle Throughput",
+    "margin": "Net Shop Margin %"
+  },
+
+  "auth": {
+    "login_title": "Sign In to Workshop Portal",
+    "login_subtitle": "Enter your mobile number/email and password to access your dashboard.",
+    "register_title": "Create Customer Account",
+    "register_subtitle": "Register to book vehicle service slots and track live repairs.",
+    "email_phone": "Email or Mobile Phone",
+    "password": "Password",
+    "full_name": "Full Name",
+    "phone": "Mobile Phone Number",
+    "login_btn": "Sign In",
+    "register_btn": "Create Account",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?"
+  }
+}

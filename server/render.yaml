@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: auto-serv-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://postgres.yvhniabxyuhfmdzzaddk:ketan%408446131495@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?sslmode=require

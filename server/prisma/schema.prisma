@@ -1,0 +1,347 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                       String              @id @default(uuid())
+  email                    String              @unique
+  passwordHash             String
+  name                     String
+  phone                    String?
+  role                     String              @default("CUSTOMER") // ADMIN, TECHNICIAN, CUSTOMER
+  preferredLanguage        String?             @default("en") // en, hi, mr
+  preferredTheme           String?             @default("dark") // dark, light
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt
+
+  vehicles                 Vehicle[]           @relation("VehicleOwner")
+  assignedJobCards         JobCard[]           @relation("TechnicianJobs")
+  customerJobCards         JobCard[]           @relation("CustomerJobs")
+  estimateApprovedJobCards JobCard[]           @relation("CustomerEstimateApprovals")
+  drawnParts               JobCardPart[]       @relation("DrawnParts")
+  qcInspections            QCReport[]          @relation("QCInspections")
+  invoices                 Invoice[]           @relation("CustomerInvoices")
+  createdInvoices          Invoice[]           @relation("AdminCreatedInvoices")
+  auditLogs                AuditLog[]          @relation("UserAuditLogs")
+  statusLogChanges         JobCardStatusLog[]  @relation("UserStatusLogChanges")
+  dispatchLogs             TwilioDispatchLog[] @relation("UserDispatchLogs")
+  attendanceRecords        AttendanceRecord[]  @relation("TechnicianAttendance")
+  timeLogs                 JobTimeLog[]        @relation("TechnicianTimeLogs")
+  customerBookings         Booking[]           @relation("CustomerBookings")
+}
+
+model Vehicle {
+  id           String    @id @default(uuid())
+  licensePlate String    @unique // Registration Number
+  make         String
+  model        String
+  year         Int       @default(2023)
+  color        String?
+  fuelType     String?   @default("Petrol")
+  vehicleType  String?   @default("4-Wheeler") // 2-Wheeler, 4-Wheeler
+  vin          String?
+  mileage      Int?      @default(0)
+  fuelLevel    String?   @default("1/2")
+  ownerId      String
+  owner        User      @relation("VehicleOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  jobCards     JobCard[]
+  bookings     Booking[] @relation("VehicleBookings")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model JobCard {
+  id             String              @id @default(uuid())
+  cardNumber     String              @unique
+  title          String
+  description    String?
+  reportedIssues String?             // Free text of reported issues
+  mileage        Int?                // Captured at check-in
+  fuelLevel      String?             // Captured at check-in
+  status         String              @default("CHECKED_IN") // CHECKED_IN, INSPECTED, ESTIMATE_APPROVED, ASSIGNED, IN_PROGRESS, QC_PENDING, QC_FAILED, QC_PASSED, INVOICED, PAID, DELIVERED
+  priority       String              @default("MEDIUM")     // LOW, MEDIUM, HIGH, URGENT
+  
+  vehicleId      String
+  vehicle        Vehicle             @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  technicianId   String?
+  technician     User?               @relation("TechnicianJobs", fields: [technicianId], references: [id], onDelete: SetNull)
+  
+  customerId     String
+  customer       User                @relation("CustomerJobs", fields: [customerId], references: [id], onDelete: Cascade)
+  
+  approvedAt     DateTime?
+  approvedById   String?
+  approvedBy     User?               @relation("CustomerEstimateApprovals", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvalNotes  String?
+
+  promisedDate   DateTime?           // Promised vehicle completion/delivery due date
+  deliveredAt    DateTime?           // Recorded when status -> DELIVERED
+
+  estimatedCost  Float               @default(0.0)
+  laborCost      Float               @default(0.0)
+  partsCost      Float               @default(0.0)
+  totalCost      Float               @default(0.0)
+  
+  parts          JobCardPart[]
+  tasks          JobTask[]
+  partEstimates  JobPartEstimate[]
+  media          JobMedia[]
+  qcReports      QCReport[]
+  invoices       Invoice[]
+  statusLogs     JobCardStatusLog[]
+  dispatchLogs   TwilioDispatchLog[]
+  timeLogs       JobTimeLog[]
+  
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+}
+
+model QCReport {
+  id                String   @id @default(uuid())
+  jobCardId         String
+  jobCard           JobCard  @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  passed            Boolean
+  notes             String?
+  checklist         String?  // JSON or string checklist summary
+  
+  inspectedByUserId String?
+  inspectedByUser   User?    @relation("QCInspections", fields: [inspectedByUserId], references: [id], onDelete: SetNull)
+  
+  timestamp         DateTime @default(now())
+}
+
+model JobMedia {
+  id          String   @id @default(uuid())
+  jobCardId   String
+  jobCard     JobCard  @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  url         String
+  type        String   @default("PRE_SERVICE_CONDITION") // PRE_SERVICE_CONDITION, PROGRESS_UPDATE, POST_SERVICE_CONDITION
+  caption     String?
+  uploadedAt  DateTime @default(now())
+}
+
+model JobTask {
+  id                  String   @id @default(uuid())
+  jobCardId           String
+  jobCard             JobCard  @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  description         String
+  estimatedLaborCost  Float    @default(0.0)
+  status              String   @default("PENDING")
+  createdAt           DateTime @default(now())
+}
+
+model JobPartEstimate {
+  id                  String         @id @default(uuid())
+  jobCardId           String
+  jobCard             JobCard        @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  inventoryItemId     String?
+  inventoryItem       InventoryItem? @relation(fields: [inventoryItemId], references: [id], onDelete: SetNull)
+  
+  partName            String
+  estimatedQuantity   Int            @default(1)
+  estimatedUnitPrice  Float          @default(0.0)
+  estimatedTotalPrice Float          @default(0.0)
+  createdAt           DateTime       @default(now())
+}
+
+model JobCardStatusLog {
+  id          String   @id @default(uuid())
+  jobCardId   String
+  jobCard     JobCard  @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  fromStatus  String?
+  toStatus    String
+  
+  changedById String?
+  changedBy   User?    @relation("UserStatusLogChanges", fields: [changedById], references: [id], onDelete: SetNull)
+  
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model TwilioDispatchLog {
+  id             String   @id @default(uuid())
+  jobCardId      String?
+  jobCard        JobCard? @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  senderUserId   String?
+  senderUser     User?    @relation("UserDispatchLogs", fields: [senderUserId], references: [id], onDelete: SetNull)
+  
+  recipientPhone String
+  mediaUrl       String?
+  messageText    String
+  status         String   @default("SENT") // QUEUED, SENT, DELIVERED, FAILED
+  sentAt         DateTime @default(now())
+}
+
+model InventoryItem {
+  id            String            @id @default(uuid())
+  sku           String            @unique
+  name          String
+  category      String            @default("General")
+  description   String?
+  quantity      Int               @default(0) // quantityOnHand
+  minimumStock  Int               @default(5)
+  unitPrice     Float             @default(0.0)
+  partType      String            @default("REGULAR") // FAST_MOVING, REGULAR, SERVICE_PART
+  location      String?           @default("Main Shelf")
+  
+  partsUsed     JobCardPart[]
+  partEstimates JobPartEstimate[]
+  auditLogs     AuditLog[]        @relation("InventoryAuditLogs")
+  
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model JobCardPart {
+  id              String        @id @default(uuid())
+  jobCardId       String
+  jobCard         JobCard       @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  inventoryItemId String
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  
+  quantity        Int           @default(1) // quantityUsed
+  unitPrice       Float
+  totalPrice      Float
+  
+  drawnByUserId   String?
+  drawnByUser     User?         @relation("DrawnParts", fields: [drawnByUserId], references: [id], onDelete: SetNull)
+  
+  createdAt       DateTime      @default(now())
+}
+
+model Invoice {
+  id                   String    @id @default(uuid())
+  invoiceNumber        String    @unique
+  jobCardId            String
+  jobCard              JobCard   @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  customerId           String
+  customer             User      @relation("CustomerInvoices", fields: [customerId], references: [id], onDelete: Cascade)
+  
+  createdById          String?
+  createdBy            User?     @relation("AdminCreatedInvoices", fields: [createdById], references: [id], onDelete: SetNull)
+
+  subtotal             Float
+  tax                  Float
+  totalAmount          Float     // Frozen final amount
+  status               String    @default("UNPAID") // UNPAID, PAID, CANCELLED
+  paymentMethod        String?   @default("UNSPECIFIED") // CARD_GATEWAY, CASH_MANUAL_ADMIN
+  transactionReference String?
+  paidAt               DateTime?
+  
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model AuditLog {
+  id              String         @id @default(uuid())
+  userId          String?
+  user            User?          @relation("UserAuditLogs", fields: [userId], references: [id], onDelete: SetNull)
+  
+  action          String
+  entity          String
+  entityId        String?
+  details         String?
+  
+  inventoryItemId String?
+  inventoryItem   InventoryItem? @relation("InventoryAuditLogs", fields: [inventoryItemId], references: [id], onDelete: SetNull)
+  
+  timestamp       DateTime       @default(now())
+}
+
+model AttendanceRecord {
+  id            String    @id @default(uuid())
+  technicianId  String
+  technician    User      @relation("TechnicianAttendance", fields: [technicianId], references: [id], onDelete: Cascade)
+  date          DateTime
+  clockInTime   DateTime
+  clockOutTime  DateTime?
+  status        String    @default("PRESENT") // PRESENT, LATE, ABSENT, ON_LEAVE
+  notes         String?
+  editedByAdmin Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([technicianId, date])
+}
+
+model JobTimeLog {
+  id              String    @id @default(uuid())
+  jobCardId       String
+  jobCard         JobCard   @relation(fields: [jobCardId], references: [id], onDelete: Cascade)
+  
+  technicianId    String
+  technician      User      @relation("TechnicianTimeLogs", fields: [technicianId], references: [id], onDelete: Cascade)
+  
+  startedAt       DateTime  @default(now())
+  endedAt         DateTime?
+  durationSeconds Int       @default(0)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model CannedNoteTemplate {
+  id          String   @id @default(uuid())
+  category    String   @default("General") // Engine, Brakes, Fluids, Electrical
+  text        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Slot {
+  id          String    @id @default(uuid())
+  date        String    // YYYY-MM-DD format e.g. "2026-08-16"
+  startTime   String    // e.g. "09:00"
+  endTime     String    // e.g. "11:00"
+  capacity    Int       @default(5)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  bookings    Booking[]
+
+  @@unique([date, startTime, endTime])
+}
+
+model Booking {
+  id             String    @id @default(uuid())
+  customerId     String
+  customer       User      @relation("CustomerBookings", fields: [customerId], references: [id], onDelete: Cascade)
+  
+  slotId         String
+  slot           Slot      @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  
+  vehicleId      String?
+  vehicle        Vehicle?  @relation("VehicleBookings", fields: [vehicleId], references: [id], onDelete: SetNull)
+  
+  licensePlate   String?
+  make           String?
+  model          String?
+  year           Int?
+  color          String?
+  fuelType       String?   @default("Petrol")
+  vehicleType    String?   @default("4-Wheeler") // 2-Wheeler, 4-Wheeler
+  approxMileage  Int?
+
+  serviceType    String?   @default("General Checkup")
+  reportedIssue  String?
+  status         String    @default("BOOKED") // BOOKED, CANCELLED, COMPLETED, NO_SHOW
+  
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+

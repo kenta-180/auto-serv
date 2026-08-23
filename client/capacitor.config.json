@@ -1,0 +1,9 @@
+{
+  "appId": "com.kenta.autoservice",
+  "appName": "Automobile Workshop",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true,
+    "androidScheme": "http"
+  }
+}

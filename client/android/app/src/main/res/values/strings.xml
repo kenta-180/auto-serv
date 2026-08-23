@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Automobile Workshop</string>
+    <string name="title_activity_main">Automobile Workshop</string>
+    <string name="package_name">com.kenta.autoservice</string>
+    <string name="custom_url_scheme">com.kenta.autoservice</string>
+</resources>
