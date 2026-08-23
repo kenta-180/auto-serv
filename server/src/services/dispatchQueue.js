@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { db } = require('../config/firestore');
+const jobCardRepository = require('../repositories/jobCardRepository');
 const { generateGalleryToken } = require('../controllers/galleryController');
 const verificationService = require('./verificationService');
 
@@ -16,15 +16,13 @@ const enqueueTwilioDispatch = async ({ jobCardId, senderUserId, recipientPhone, 
       await new Promise(resolve => setTimeout(resolve, 300));
 
       // Record TwilioDispatchLog entry in database
-      await prisma.twilioDispatchLog.create({
-        data: {
-          jobCardId: jobCardId || null,
-          senderUserId: senderUserId || null,
-          recipientPhone: recipientPhone || '+15550001122',
-          mediaUrl: mediaUrl || null,
-          messageText: messageText || 'Stage completion WhatsApp alert from Auto-Serv Workshop',
-          status: isVerified ? 'SENT' : 'FALLBACK_UNVERIFIED'
-        }
+      await jobCardRepository.createDispatchLog({
+        jobCardId: jobCardId || null,
+        senderUserId: senderUserId || null,
+        recipientPhone: recipientPhone || '+15550001122',
+        mediaUrl: mediaUrl || null,
+        messageText: messageText || 'Stage completion WhatsApp alert from Auto-Serv Workshop',
+        status: isVerified ? 'SENT' : 'FALLBACK_UNVERIFIED'
       });
 
       console.log(`[WhatsApp / Twilio Queue] WhatsApp dispatch logged successfully for JobCard ${jobCardId} (Verified: ${isVerified})`);
@@ -104,19 +102,7 @@ const sendStageWhatsAppAlert = async ({ jobCard, stageStatus, senderUserId, cust
  */
 const sendConsolidatedDeliveryPackage = async ({ jobCardId, senderUserId }) => {
   try {
-    const card = await prisma.jobCard.findUnique({
-      where: { id: jobCardId },
-      include: {
-        customer: true,
-        vehicle: true,
-        invoices: {
-          where: { status: { not: 'CANCELLED' } },
-          orderBy: { createdAt: 'desc' },
-          take: 1
-        },
-        media: true
-      }
-    });
+    const card = await jobCardRepository.findById(jobCardId);
 
     if (!card) return null;
 
@@ -133,14 +119,12 @@ const sendConsolidatedDeliveryPackage = async ({ jobCardId, senderUserId }) => {
     if (!isVerified) {
       console.warn(`[WhatsApp Delivery Package] Recipient phone ${recipientPhone} is UNVERIFIED (phoneVerified: false). Blocking WhatsApp delivery package and sending fallback SMS.`);
 
-      await prisma.twilioDispatchLog.create({
-        data: {
-          jobCardId: card.id,
-          senderUserId: senderUserId || null,
-          recipientPhone,
-          messageText: `[Unverified Phone Alert] Customer phone ${recipientPhone} is unverified. Consolidated WhatsApp blocked.`,
-          status: 'BLOCKED_UNVERIFIED'
-        }
+      await jobCardRepository.createDispatchLog({
+        jobCardId: card.id,
+        senderUserId: senderUserId || null,
+        recipientPhone,
+        messageText: `[Unverified Phone Alert] Customer phone ${recipientPhone} is unverified. Consolidated WhatsApp blocked.`,
+        status: 'BLOCKED_UNVERIFIED'
       });
 
       const fallbackSms = `🚘 Auto-Serv Alert: Vehicle ${vehicleStr} (Job Card #${cardNum}) has been delivered. Invoice Total: ₹${totalAmount.toFixed(2)}. Thank you for choosing Auto-Serv!`;
@@ -199,13 +183,14 @@ const getTechImagesSentToday = async (userId) => {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
-    const count = await prisma.twilioDispatchLog.count({
-      where: {
-        senderUserId: userId,
-        sentAt: { gte: startOfDay },
-        mediaUrl: { not: null }
-      }
-    });
+    const snap = await db.collection('twilioDispatchLogs')
+      .where('senderUserId', '==', userId)
+      .get();
+
+    const count = snap.docs.filter(d => {
+      const data = d.data();
+      return data.mediaUrl && new Date(data.sentAt || data.createdAt) >= startOfDay;
+    }).length;
 
     return count;
   } catch (error) {
