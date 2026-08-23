@@ -251,7 +251,6 @@ export default function Navbar({ user, activeTab, onTabChange, onRoleSwitch, onS
         borderBottom: '1px solid var(--border-color)',
         position: 'sticky',
         top: 0,
-        paddingTop: 'max(env(safe-area-inset-top), 24px)',
         zIndex: 100,
         width: '100%',
         color: 'var(--text-main)',

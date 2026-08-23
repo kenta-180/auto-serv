@@ -66,8 +66,6 @@ body {
   min-height: 100vh;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  padding-top: max(env(safe-area-inset-top), 24px);
-  padding-bottom: max(env(safe-area-inset-bottom), 16px);
 }
 
 button, input, select, textarea {
