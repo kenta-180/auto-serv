@@ -19,39 +19,6 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
   const [error, setError] = useState('');
   const [showForgotModal, setShowForgotModal] = useState(false);
 
-  // Server Connection Configuration State
-  const [showServerConfig, setShowServerConfig] = useState(false);
-  const [serverUrlInput, setServerUrlInput] = useState(getApiBase());
-  const [testResult, setTestResult] = useState('');
-  const [testing, setTesting] = useState(false);
-
-  const handleTestConnection = async (urlToTest) => {
-    const targetUrl = (urlToTest || serverUrlInput).trim();
-    try {
-      setTesting(true);
-      setTestResult('');
-      const healthUrl = `${targetUrl.replace(/\/+$/, '')}/health`;
-      const res = await fetch(healthUrl, { mode: 'cors' });
-      if (res.ok) {
-        setTestResult('✅ Server connected successfully!');
-      } else {
-        setTestResult('⚠️ Server returned HTTP ' + res.status);
-      }
-    } catch (e) {
-      setTestResult('❌ Cannot reach ' + targetUrl + ' (' + e.message + ')');
-    } finally {
-      setTesting(false);
-    }
-  };
-
-  const handleSaveServerUrl = (newUrl) => {
-    const trimmed = newUrl.trim();
-    localStorage.setItem('custom_api_url', trimmed);
-    setServerUrlInput(trimmed);
-    setTestResult('✅ Applied Server API URL: ' + trimmed);
-    setError('');
-  };
-
   // Role Tab Configuration
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
@@ -70,9 +37,6 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
         onLoginSuccess(data.user, data.token);
       }
     } catch (err) {
-      if (err.name === 'TimeoutError' || (err.message && (err.message.includes('fetch') || err.message.includes('timed out') || err.message.includes('aborted')))) {
-        setShowServerConfig(true);
-      }
       const msg = err.name === 'TimeoutError' ? 'Server request timed out. Please check backend connection.' : (err.message || 'Server error');
       setError('Quick login failed: ' + msg);
     } finally {
@@ -493,101 +457,6 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
           >
             Create New Account (Customer / Admin)
           </button>
-        </div>
-
-        {/* Server API Endpoint Config & Connection Test */}
-        <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed var(--border-color)', textAlign: 'center' }}>
-          <button
-            type="button"
-            onClick={() => setShowServerConfig(!showServerConfig)}
-            style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '11px', fontWeight: '700', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-          >
-            ⚙️ Server Connection Settings {showServerConfig ? '▲' : '▼'}
-          </button>
-
-          {showServerConfig && (
-            <div style={{ marginTop: '8px', background: 'var(--bg-dark)', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'left' }}>
-              <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '4px' }}>
-                Backend API Server Base URL
-              </div>
-              <input
-                type="text"
-                value={serverUrlInput}
-                onChange={(e) => setServerUrlInput(e.target.value)}
-                placeholder="http://192.168.0.102:5000/api"
-                style={{ width: '100%', height: '32px', fontSize: '11px', padding: '0 8px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-main)', marginBottom: '6px' }}
-              />
-              <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '4px' }}>
-                Quick Presets:
-              </div>
-              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => handleSaveServerUrl('http://127.0.0.1:5000/api')}
-                  style={{ fontSize: '10px', padding: '3px 6px', background: '#1e293b', border: '1px solid #334155', color: '#38bdf8', borderRadius: '4px', cursor: 'pointer' }}
-                >
-                  127.0.0.1:5000
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSaveServerUrl('http://localhost:5000/api')}
-                  style={{ fontSize: '10px', padding: '3px 6px', background: '#1e293b', border: '1px solid #334155', color: '#38bdf8', borderRadius: '4px', cursor: 'pointer' }}
-                >
-                  localhost:5000
-                </button>
-                {typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && (
-                  <button
-                    type="button"
-                    onClick={() => handleSaveServerUrl(`http://${window.location.hostname}:5000/api`)}
-                    style={{ fontSize: '10px', padding: '3px 6px', background: '#1e293b', border: '1px solid #334155', color: '#a855f7', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Network IP ({window.location.hostname})
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleSaveServerUrl('http://10.0.2.2:5000/api')}
-                  style={{ fontSize: '10px', padding: '3px 6px', background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', borderRadius: '4px', cursor: 'pointer' }}
-                >
-                  10.0.2.2 (Emulator)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    localStorage.removeItem('custom_api_url');
-                    setServerUrlInput('http://127.0.0.1:5000/api');
-                    setTestResult('✅ Reset to default local server URL.');
-                    setError('');
-                  }}
-                  style={{ fontSize: '10px', padding: '3px 6px', background: '#334155', border: '1px solid #475569', color: '#f87171', borderRadius: '4px', cursor: 'pointer' }}
-                >
-                  ↺ Reset Default
-                </button>
-              </div>
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <button
-                  type="button"
-                  onClick={() => handleTestConnection(serverUrlInput)}
-                  disabled={testing}
-                  style={{ flex: 1, padding: '4px 8px', fontSize: '11px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: '700', cursor: 'pointer' }}
-                >
-                  {testing ? 'Testing...' : 'Test Connection'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSaveServerUrl(serverUrlInput)}
-                  style={{ flex: 1, padding: '4px 8px', fontSize: '11px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: '700', cursor: 'pointer' }}
-                >
-                  Apply & Save
-                </button>
-              </div>
-              {testResult && (
-                <div style={{ marginTop: '6px', fontSize: '11px', fontWeight: '700', color: testResult.includes('✅') ? '#4ade80' : '#f87171' }}>
-                  {testResult}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
