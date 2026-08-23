@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Check, UserPlus, Wrench } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AddTechnicianModal({ onClose, onSuccess }) {
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');

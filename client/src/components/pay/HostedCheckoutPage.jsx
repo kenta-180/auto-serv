@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, CreditCard, Lock, ArrowLeft, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function HostedCheckoutPage({ sessionIdParam }) {
+  const { t, formatCurrency } = useLanguage();
   const getParams = () => {
     let sessId = sessionIdParam;
     let invId = '';

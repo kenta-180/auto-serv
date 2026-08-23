@@ -138,5 +138,73 @@
     "register_btn": "Create Account",
     "no_account": "Don't have an account?",
     "have_account": "Already have an account?"
+  },
+
+  "users": {
+    "title": "User & Staff Management",
+    "subtitle": "Manage technician accounts, customer registrations, and shift attendance rosters.",
+    "technicians": "Technicians",
+    "customers": "Customers",
+    "add_technician": "Add New Technician",
+    "role": "Role",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "status": "Status",
+    "actions": "Actions"
+  },
+
+  "invoices": {
+    "title": "Tax Invoices & Billing",
+    "subtitle": "Official tax invoices, digital payment receipts, and customer billing histories.",
+    "invoice_number": "Invoice #",
+    "job_card_id": "Job Card",
+    "customer": "Customer Name",
+    "amount": "Total Billed",
+    "date": "Issue Date",
+    "status": "Payment Status",
+    "download_pdf": "Download PDF",
+    "pay_online": "Pay Online",
+    "paid": "Paid & Settled",
+    "unpaid": "Payment Pending"
+  },
+
+  "booking": {
+    "title": "Book Workshop Service Slot",
+    "subtitle": "Schedule fast-track workshop intake for your vehicle.",
+    "select_date": "Preferred Date",
+    "select_time": "Preferred Time Slot",
+    "vehicle_make": "Vehicle Make / Model",
+    "license_plate": "License Plate",
+    "service_type": "Service Package",
+    "customer_notes": "Service Notes & Issues",
+    "book_btn": "Confirm Booking Slot",
+    "booking_history": "My Service Bookings"
+  },
+
+  "gallery": {
+    "title": "Service Inspection Photo Gallery",
+    "subtitle": "Real-time pre-service condition and technician progress photos.",
+    "pre_service": "Pre-Service Intake Photos",
+    "in_progress": "Repair Progress Milestone Photos",
+    "qc_photos": "Quality Control Verification Photos",
+    "no_photos": "No inspection photos uploaded yet."
+  },
+
+  "attendance": {
+    "title": "Technician Attendance & Shift Roster",
+    "subtitle": "Track technician clock-in times, shift durations, and daily attendance logs.",
+    "clock_in_time": "Clock In Time",
+    "clock_out_time": "Clock Out Time",
+    "total_hours": "Shift Duration",
+    "status": "Attendance Status"
+  },
+
+  "modals": {
+    "check_in_title": "Check-In Vehicle (Create Job Card)",
+    "add_tech_title": "Add New Workshop Technician",
+    "adjust_stock_title": "Adjust Inventory Stock Quantity",
+    "add_sku_title": "Add New Inventory Spare Part",
+    "specs_title": "Automotive Technical Specifications",
+    "camera_title": "Capture Inspection Photo"
   }
 }

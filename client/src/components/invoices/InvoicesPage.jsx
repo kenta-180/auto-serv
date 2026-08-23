@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { FileText, DollarSign, CheckCircle2, Download, Clock, Eye } from 'lucide-react';
 import { api } from '../../services/api';
 import InvoiceModal from '../InvoiceModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function InvoicesPage({ currentUser, jobCards = [] }) {
+  const { t, formatCurrency, formatDate, getStatusLabel } = useLanguage();
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const safeJobCards = Array.isArray(jobCards) ? jobCards : [];
 

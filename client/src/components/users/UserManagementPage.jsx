@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Users, UserPlus, Shield, Wrench, GraduationCap, ShieldAlert } from 'lucide-react';
 import AddTechnicianModal from '../AddTechnicianModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function UserManagementPage({ currentUser, technicians = [], customers = [], onRefresh }) {
+  const { t } = useLanguage();
   const [showAddTechModal, setShowAddTechModal] = useState(false);
 
   if (currentUser?.role !== 'ADMIN') {

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Plus, Package } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AddInventoryModal({ onClose, onSuccess }) {
+  const { t } = useLanguage();
   const [sku, setSku] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('PARTS');

@@ -4,8 +4,10 @@ import {
   Lock, AlertCircle, X, CheckCircle2, User, Clock, Image as ImageIcon
 } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CustomerGalleryPage({ jobCardId: propJobCardId }) {
+  const { t, formatDate, getStatusLabel } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

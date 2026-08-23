@@ -3,8 +3,10 @@ import {
   Calendar, Clock, Shield, Search, Filter, Edit3, Check, X, User, AlertCircle
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminAttendanceModal({ technicians = [], onClose, onRefresh }) {
+  const { t, formatDate, getStatusLabel } = useLanguage();
   const [records, setRecords] = useState([]);
   const [jobsWorkedOn, setJobsWorkedOn] = useState([]);
   const [summary, setSummary] = useState({});

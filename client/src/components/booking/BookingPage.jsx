@@ -4,10 +4,12 @@ import {
   Plus, X, ChevronRight, ShieldCheck, ArrowRight, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 import LiveStatusTracker from './LiveStatusTracker';
 
 export default function BookingPage({ currentUser }) {
+  const { t, formatDate, getStatusLabel } = useLanguage();
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
   const [selectedDate, setSelectedDate] = useState(getTodayStr());

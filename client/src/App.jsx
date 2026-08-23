@@ -254,57 +254,77 @@ function MainApp() {
     }
   };
 
-  if (loadingSession) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ textAlign: 'center', padding: '24px' }}>
-          <RefreshCw size={32} className="spin-icon" style={{ animation: 'spin 1s linear infinite', marginBottom: '12px', color: '#3b82f6' }} />
-          <div style={{ fontSize: '15px', fontWeight: '600', color: '#f8fafc' }}>Verifying Session...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (sessionError) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f8fafc', fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ maxWidth: '400px', width: '90%', background: '#1e293b', border: '1px solid #334155', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
-          <AlertTriangle size={48} color="#ef4444" style={{ marginBottom: '16px', display: 'inline-block' }} />
-          <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '8px' }}>Connection Notice</h3>
-          <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '24px' }}>{sessionError}</p>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button className="btn" style={{ flex: 1, padding: '10px', background: '#334155', color: '#f8fafc', border: 'none', borderRadius: '8px', cursor: 'pointer' }} onClick={() => { localStorage.removeItem('token'); setSessionError(null); setUser(null); }}>
-              Reset Session
-            </button>
-            <button className="btn btn-primary" style={{ flex: 1, padding: '10px', borderRadius: '8px', cursor: 'pointer' }} onClick={verifySession}>
-              Retry Connection
-            </button>
+  const renderContent = () => {
+    if (loadingSession) {
+      return (
+        <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ textAlign: 'center', padding: '24px' }}>
+            <RefreshCw size={32} className="spin-icon" style={{ animation: 'spin 1s linear infinite', marginBottom: '12px', color: '#3b82f6' }} />
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#f8fafc' }}>Verifying Session...</div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  // Public Access Gate for Customer Payment Links & Hosted Gateway Session
-  if (typeof window !== 'undefined') {
-    const pathname = window.location.pathname;
-    if (pathname.startsWith('/pay/')) {
-      return <PaymentLandingPage />;
-    }
-    if (pathname.startsWith('/checkout/')) {
-      return <HostedCheckoutPage />;
-    }
-    if (pathname.startsWith('/gallery/')) {
-      return <CustomerGalleryPage />;
-    }
-  }
-
-  // Enforce Authentication Gate: Default to Sign-Up Page (RegisterPage) when unauthenticated
-  if (!user) {
-    if (authScreen === 'login') {
+    if (sessionError) {
       return (
-        <LoginPage 
-          onLoginSuccess={(userData, token) => {
+        <div style={{ minHeight: '100vh', background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f8fafc', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ maxWidth: '400px', width: '90%', background: '#1e293b', border: '1px solid #334155', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
+            <AlertTriangle size={48} color="#ef4444" style={{ marginBottom: '16px', display: 'inline-block' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '8px' }}>Connection Notice</h3>
+            <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '24px' }}>{sessionError}</p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button className="btn" style={{ flex: 1, padding: '10px', background: '#334155', color: '#f8fafc', border: 'none', borderRadius: '8px', cursor: 'pointer' }} onClick={() => { localStorage.removeItem('token'); setSessionError(null); setUser(null); }}>
+                Reset Session
+              </button>
+              <button className="btn btn-primary" style={{ flex: 1, padding: '10px', borderRadius: '8px', cursor: 'pointer' }} onClick={verifySession}>
+                Retry Connection
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Public Access Gate for Customer Payment Links & Hosted Gateway Session
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/pay/')) {
+        return <PaymentLandingPage />;
+      }
+      if (pathname.startsWith('/checkout/')) {
+        return <HostedCheckoutPage />;
+      }
+      if (pathname.startsWith('/gallery/')) {
+        return <CustomerGalleryPage />;
+      }
+    }
+
+    // Enforce Authentication Gate: Default to Sign-Up Page (RegisterPage) when unauthenticated
+    if (!user) {
+      if (authScreen === 'login') {
+        return (
+          <LoginPage 
+            onLoginSuccess={(userData, token) => {
+              if (token) localStorage.setItem('token', token);
+              localStorage.setItem('hasRegistered', 'true');
+              if (userData?.email) localStorage.setItem('lastUserEmail', userData.email);
+              setActiveTab('dashboard');
+              setSelectedJobCard(null);
+              setUser(userData);
+              loadDashboardData();
+            }}
+            onSwitchToRegister={() => {
+              setAuthScreen('register');
+              if (typeof window !== 'undefined') window.history.pushState({}, '', '/register');
+            }}
+          />
+        );
+      }
+
+      return (
+        <RegisterPage 
+          onRegisterSuccess={(userData, token) => {
             if (token) localStorage.setItem('token', token);
             localStorage.setItem('hasRegistered', 'true');
             if (userData?.email) localStorage.setItem('lastUserEmail', userData.email);
@@ -313,211 +333,167 @@ function MainApp() {
             setUser(userData);
             loadDashboardData();
           }}
-          onSwitchToRegister={() => {
-            setAuthScreen('register');
-            if (typeof window !== 'undefined') window.history.pushState({}, '', '/register');
+          onSwitchToLogin={() => {
+            setAuthScreen('login');
+            if (typeof window !== 'undefined') window.history.pushState({}, '', '/login');
           }}
         />
       );
     }
 
+    const activeUser = user;
+
+    const renderTabContent = () => {
+      switch (activeTab) {
+        case 'dashboard':
+          if (activeUser.role === 'ADMIN') {
+            return (
+              <AdminDashboard
+                jobCards={jobCards}
+                inventory={inventory}
+                customers={customers}
+                onNavigateTab={(tab, options) => {
+                  setActiveTab(tab);
+                }}
+                onOpenCheckIn={() => setShowCreateModal(true)}
+                onOpenAddTech={() => setShowAddTechModal(true)}
+                onOpenHistoryModal={() => setShowHistoryModal(true)}
+                onOpenAttendance={() => setShowAttendanceModal(true)}
+              />
+            );
+          } else if (activeUser.role === 'TECHNICIAN') {
+            return (
+              <TechnicianDashboard
+                currentUser={activeUser}
+                jobCards={jobCards}
+                inventory={inventory}
+                onSelectJobCard={setSelectedJobCard}
+                onNavigateTab={setActiveTab}
+                onRefresh={loadDashboardData}
+              />
+            );
+          } else {
+            return (
+              <StudentDashboard
+                currentUser={activeUser}
+                jobCards={jobCards}
+                vehicles={vehicles}
+                onSelectJobCard={setSelectedJobCard}
+                onNavigateTab={setActiveTab}
+                onRefresh={loadDashboardData}
+              />
+            );
+          }
+
+        case 'job-cards':
+          return (
+            <JobCardsPage
+              currentUser={activeUser}
+              jobCards={jobCards}
+              onSelectJobCard={setSelectedJobCard}
+              onOpenCheckIn={() => setShowCreateModal(true)}
+              onOpenHistoryModal={() => setShowHistoryModal(true)}
+            />
+          );
+
+        case 'inventory':
+          return (
+            <InventoryPage
+              currentUser={activeUser}
+              inventory={inventory}
+              jobCards={jobCards}
+              onRefresh={loadDashboardData}
+            />
+          );
+
+        case 'reports':
+          return (
+            <ReportsPage
+              currentUser={activeUser}
+              jobCards={jobCards}
+              inventory={inventory}
+              technicians={technicians}
+            />
+          );
+
+        case 'users':
+          return (
+            <UserManagementPage
+              currentUser={activeUser}
+              technicians={technicians}
+              customers={customers}
+              onRefresh={loadDashboardData}
+            />
+          );
+
+        case 'invoices':
+          return (
+            <InvoicesPage
+              currentUser={activeUser}
+              jobCards={jobCards}
+            />
+          );
+
+        case 'book-service':
+          return (
+            <BookingPage
+              currentUser={activeUser}
+            />
+          );
+
+        case 'schedule':
+          return (
+            <AdminSchedulePage
+              onOpenCheckInWithBooking={(booking) => {
+                setSelectedBookingForCheckIn(booking);
+                setShowCreateModal(true);
+              }}
+            />
+          );
+
+        default:
+          if (activeUser.role === 'ADMIN') {
+            return (
+              <AdminDashboard
+                jobCards={jobCards}
+                inventory={inventory}
+                customers={customers}
+                onNavigateTab={(tab, options) => {
+                  setActiveTab(tab);
+                }}
+                onOpenCheckIn={() => setShowCreateModal(true)}
+                onOpenAddTech={() => setShowAddTechModal(true)}
+                onOpenHistoryModal={() => setShowHistoryModal(true)}
+                onOpenAttendance={() => setShowAttendanceModal(true)}
+              />
+            );
+          } else if (activeUser.role === 'TECHNICIAN') {
+            return (
+              <TechnicianDashboard
+                currentUser={activeUser}
+                jobCards={jobCards}
+                inventory={inventory}
+                onSelectJobCard={setSelectedJobCard}
+                onNavigateTab={setActiveTab}
+                onRefresh={loadDashboardData}
+              />
+            );
+          } else {
+            return (
+              <StudentDashboard
+                currentUser={activeUser}
+                jobCards={jobCards}
+                vehicles={vehicles}
+                onSelectJobCard={setSelectedJobCard}
+                onNavigateTab={setActiveTab}
+                onRefresh={loadDashboardData}
+              />
+            );
+          }
+      }
+    };
+
     return (
-      <RegisterPage 
-        onRegisterSuccess={(userData, token) => {
-          if (token) localStorage.setItem('token', token);
-          localStorage.setItem('hasRegistered', 'true');
-          if (userData?.email) localStorage.setItem('lastUserEmail', userData.email);
-          setActiveTab('dashboard');
-          setSelectedJobCard(null);
-          setUser(userData);
-          loadDashboardData();
-        }}
-        onSwitchToLogin={() => {
-          setAuthScreen('login');
-          if (typeof window !== 'undefined') window.history.pushState({}, '', '/login');
-        }}
-      />
-    );
-  }
-
-  const activeUser = user;
-
-  // Safe Array Wrappers to prevent runtime TypeError if API returns error object
-  const safeJobCards = Array.isArray(jobCards) ? jobCards : [];
-  const safeInventory = Array.isArray(inventory) ? inventory : [];
-
-  // Analytics Metrics (Materialized Calculation)
-  const totalRevenue = safeJobCards
-    .filter(c => c && (c.status === 'PAID' || c.status === 'DELIVERED'))
-    .reduce((sum, c) => sum + (c.totalCost || 0), 0);
-
-  const activeJobCount = safeJobCards.filter(c => c && c.status !== 'DELIVERED').length;
-  const closedJobCount = safeJobCards.filter(c => c && c.status === 'DELIVERED').length;
-
-  const filteredJobCards = safeJobCards.filter(card => {
-    if (!card) return false;
-    const matchesStatus = statusFilter === 'ALL' || card.status === statusFilter;
-    const q = searchQuery.toLowerCase();
-    const matchesSearch = !searchQuery || 
-      card.cardNumber?.toLowerCase().includes(q) ||
-      card.title?.toLowerCase().includes(q) ||
-      card.vehicle?.licensePlate?.toLowerCase().includes(q) ||
-      card.customer?.name?.toLowerCase().includes(q);
-    return matchesStatus && matchesSearch;
-  });
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        if (activeUser.role === 'ADMIN') {
-          return (
-            <AdminDashboard
-              jobCards={jobCards}
-              inventory={inventory}
-              customers={customers}
-              onNavigateTab={(tab, options) => {
-                setActiveTab(tab);
-              }}
-              onOpenCheckIn={() => setShowCreateModal(true)}
-              onOpenAddTech={() => setShowAddTechModal(true)}
-              onOpenHistoryModal={() => setShowHistoryModal(true)}
-              onOpenAttendance={() => setShowAttendanceModal(true)}
-            />
-          );
-        } else if (activeUser.role === 'TECHNICIAN') {
-          return (
-            <TechnicianDashboard
-              currentUser={activeUser}
-              jobCards={jobCards}
-              inventory={inventory}
-              onSelectJobCard={setSelectedJobCard}
-              onNavigateTab={setActiveTab}
-              onRefresh={loadDashboardData}
-            />
-          );
-        } else {
-          return (
-            <StudentDashboard
-              currentUser={activeUser}
-              jobCards={jobCards}
-              vehicles={vehicles}
-              onSelectJobCard={setSelectedJobCard}
-              onNavigateTab={setActiveTab}
-              onRefresh={loadDashboardData}
-            />
-          );
-        }
-
-      case 'job-cards':
-        return (
-          <JobCardsPage
-            currentUser={activeUser}
-            jobCards={jobCards}
-            onSelectJobCard={setSelectedJobCard}
-            onOpenCheckIn={() => setShowCreateModal(true)}
-            onOpenHistoryModal={() => setShowHistoryModal(true)}
-          />
-        );
-
-      case 'inventory':
-        return (
-          <InventoryPage
-            currentUser={activeUser}
-            inventory={inventory}
-            jobCards={jobCards}
-            onRefresh={loadDashboardData}
-          />
-        );
-
-      case 'reports':
-        return (
-          <ReportsPage
-            currentUser={activeUser}
-            jobCards={jobCards}
-            inventory={inventory}
-            technicians={technicians}
-          />
-        );
-
-      case 'users':
-        return (
-          <UserManagementPage
-            currentUser={activeUser}
-            technicians={technicians}
-            customers={customers}
-            onRefresh={loadDashboardData}
-          />
-        );
-
-      case 'invoices':
-        return (
-          <InvoicesPage
-            currentUser={activeUser}
-            jobCards={jobCards}
-          />
-        );
-
-      case 'book-service':
-        return (
-          <BookingPage
-            currentUser={activeUser}
-          />
-        );
-
-      case 'schedule':
-        return (
-          <AdminSchedulePage
-            onOpenCheckInWithBooking={(booking) => {
-              setSelectedBookingForCheckIn(booking);
-              setShowCreateModal(true);
-            }}
-          />
-        );
-
-      default:
-        if (activeUser.role === 'ADMIN') {
-          return (
-            <AdminDashboard
-              jobCards={jobCards}
-              inventory={inventory}
-              customers={customers}
-              onNavigateTab={(tab, options) => {
-                setActiveTab(tab);
-              }}
-              onOpenCheckIn={() => setShowCreateModal(true)}
-              onOpenAddTech={() => setShowAddTechModal(true)}
-              onOpenHistoryModal={() => setShowHistoryModal(true)}
-              onOpenAttendance={() => setShowAttendanceModal(true)}
-            />
-          );
-        } else if (activeUser.role === 'TECHNICIAN') {
-          return (
-            <TechnicianDashboard
-              currentUser={activeUser}
-              jobCards={jobCards}
-              inventory={inventory}
-              onSelectJobCard={setSelectedJobCard}
-              onNavigateTab={setActiveTab}
-              onRefresh={loadDashboardData}
-            />
-          );
-        } else {
-          return (
-            <StudentDashboard
-              currentUser={activeUser}
-              jobCards={jobCards}
-              vehicles={vehicles}
-              onSelectJobCard={setSelectedJobCard}
-              onNavigateTab={setActiveTab}
-              onRefresh={loadDashboardData}
-            />
-          );
-        }
-    }
-  };
-
-  return (
-    <LanguageProvider user={activeUser}>
       <div className="app-container">
         {/* Role-Aware Navigation Bar */}
         <Navbar
@@ -591,6 +567,12 @@ function MainApp() {
           />
         )}
       </div>
+    );
+  };
+
+  return (
+    <LanguageProvider user={user}>
+      {renderContent()}
     </LanguageProvider>
   );
 }

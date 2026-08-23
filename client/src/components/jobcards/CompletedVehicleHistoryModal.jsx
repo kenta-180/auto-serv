@@ -4,12 +4,14 @@ import {
   ExternalLink, Calendar, User, DollarSign, Filter, Eye, Award, ShieldCheck
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function CompletedVehicleHistoryModal({ 
   jobCards = [], 
   onSelectJobCard, 
   onClose 
 }) {
+  const { t, formatCurrency, formatDate, getStatusLabel } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicleFilter, setSelectedVehicleFilter] = useState('ALL');
 

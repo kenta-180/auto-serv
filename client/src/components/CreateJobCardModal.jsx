@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Car, UserPlus, FileText } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CreateJobCardModal({ vehicles, customers, technicians, prefillBooking, onClose, onRefresh, onSuccess }) {
+  const { t, formatCurrency } = useLanguage();
   const [customerMode, setCustomerMode] = useState(customers && customers.length > 0 ? 'existing' : 'new'); // 'existing' | 'new'
   const [customerId, setCustomerId] = useState(customers && customers.length > 0 ? customers[0].id : '');
   const [customerName, setCustomerName] = useState('');

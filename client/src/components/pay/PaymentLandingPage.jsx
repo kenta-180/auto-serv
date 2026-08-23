@@ -5,8 +5,10 @@ import {
   QrCode, Smartphone, ExternalLink, Send, Banknote
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PaymentLandingPage({ invoiceIdParam, tokenParam }) {
+  const { t, formatCurrency, formatDate, getStatusLabel } = useLanguage();
   // Extract parameters from props or URL
   const getParams = () => {
     let invId = invoiceIdParam;

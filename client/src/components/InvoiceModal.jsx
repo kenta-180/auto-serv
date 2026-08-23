@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Check, Printer, CreditCard, Send, ShieldCheck } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function InvoiceModal({ invoice, currentUser, onClose, onRefresh }) {
+  const { t, formatCurrency, formatDate, getStatusLabel } = useLanguage();
   const [paymentMethod, setPaymentMethod] = useState('CARD');
   const [ref, setRef] = useState(`TXN-${Date.now().toString().slice(-6)}`);
   const [error, setError] = useState('');

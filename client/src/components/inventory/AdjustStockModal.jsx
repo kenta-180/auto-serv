@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, RefreshCw, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdjustStockModal({ item, onClose, onSuccess }) {
+  const { t } = useLanguage();
   const [delta, setDelta] = useState(5);
   const [actionType, setActionType] = useState('add'); // 'add' | 'subtract'
   const [reason, setReason] = useState('Supplier Stock Replenishment');

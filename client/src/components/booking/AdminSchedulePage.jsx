@@ -4,8 +4,10 @@ import {
   RefreshCw, Plus, UserCheck, ShieldCheck, FileText, ArrowRight
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AdminSchedulePage({ onOpenCheckInWithBooking }) {
+  const { t, formatDate, getStatusLabel } = useLanguage();
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
   const [selectedDate, setSelectedDate] = useState(getTodayStr());
