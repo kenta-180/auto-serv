@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle2, Clock, Wrench, ShieldCheck, AlertCircle, Calendar, Camera, X } from 'lucide-react';
 import CustomerPaymentLandingModal from '../pay/CustomerPaymentLandingModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 const STAGES = [
   {
@@ -41,6 +42,7 @@ const STAGES = [
 ];
 
 export default function LiveStatusTracker({ jobCard }) {
+  const { t, getStatusLabel } = useLanguage();
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [showPaymentLanding, setShowPaymentLanding] = useState(false);
 

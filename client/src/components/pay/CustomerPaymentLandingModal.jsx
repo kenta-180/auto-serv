@@ -3,12 +3,14 @@ import {
   X, CheckCircle2, QrCode, Phone, Copy, Check, DollarSign, CreditCard, ShieldCheck, AlertCircle, RefreshCw, Banknote
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function CustomerPaymentLandingModal({ 
   jobCard, 
   onClose, 
   onSuccess 
 }) {
+  const { t, formatCurrency } = useLanguage();
   const [selectedMethod, setSelectedMethod] = useState('UPI'); // 'UPI' | 'COD'
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CreateVehicleModal({ customers, currentUser, onClose, onRefresh }) {
+  const { t } = useLanguage();
   const [licensePlate, setLicensePlate] = useState('');
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
@@ -42,7 +44,7 @@ export default function CreateVehicleModal({ customers, currentUser, onClose, on
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Register Vehicle</h3>
+          <h3 style={{ fontSize: '18px', fontWeight: '700' }}>{t('job_cards.register_vehicle') || 'Register Vehicle'}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
             <X size={18} />
           </button>
@@ -53,24 +55,24 @@ export default function CreateVehicleModal({ customers, currentUser, onClose, on
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div className="form-group">
-              <label>License Plate *</label>
+              <label>{t('job_cards.plate_number') || 'License Plate'} *</label>
               <input type="text" className="form-control" placeholder="e.g. ABC-1234" value={licensePlate} onChange={e => setLicensePlate(e.target.value.toUpperCase())} required />
             </div>
 
             <div className="form-group">
-              <label>Year *</label>
+              <label>{t('job_cards.year') || 'Year'} *</label>
               <input type="number" min="1990" max="2027" className="form-control" value={year} onChange={e => setYear(e.target.value)} required />
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div className="form-group">
-              <label>Make (Manufacturer) *</label>
+              <label>{t('job_cards.make') || 'Make (Manufacturer)'} *</label>
               <input type="text" className="form-control" placeholder="e.g. Toyota / Honda / BMW" value={make} onChange={e => setMake(e.target.value)} required />
             </div>
 
             <div className="form-group">
-              <label>Model *</label>
+              <label>{t('job_cards.model') || 'Model'} *</label>
               <input type="text" className="form-control" placeholder="e.g. Camry / Civic / M3" value={model} onChange={e => setModel(e.target.value)} required />
             </div>
           </div>
@@ -82,7 +84,7 @@ export default function CreateVehicleModal({ customers, currentUser, onClose, on
 
           {currentUser.role === 'ADMIN' && customers.length > 0 && (
             <div className="form-group">
-              <label>Vehicle Owner</label>
+              <label>{t('job_cards.customer') || 'Vehicle Owner'}</label>
               <select className="form-control" value={ownerId} onChange={e => setOwnerId(e.target.value)}>
                 {customers.map(c => (
                   <option key={c.id} value={c.id}>{c.name} ({c.email})</option>
@@ -92,9 +94,9 @@ export default function CreateVehicleModal({ customers, currentUser, onClose, on
           )}
 
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>{t('actions.cancel') || 'Cancel'}</button>
             <button type="submit" className="btn btn-primary" disabled={loading}>
-              <Check size={14} /> Register Vehicle
+              <Check size={14} /> {t('job_cards.register_vehicle') || 'Register Vehicle'}
             </button>
           </div>
         </form>

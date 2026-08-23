@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Camera, Barcode, CheckCircle, RefreshCw } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function BarcodeScannerModal({ onClose, onScan, inventory = [] }) {
+  const { t, formatCurrency } = useLanguage();
   const [scannedCode, setScannedCode] = useState('');
   const [manualCode, setManualCode] = useState('');
   const [cameraActive, setCameraActive] = useState(false);

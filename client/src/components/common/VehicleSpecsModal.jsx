@@ -1,7 +1,9 @@
 import React from 'react';
 import { X, Wrench, Fuel, Gauge, Droplet, CheckCircle, Info } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function VehicleSpecsModal({ onClose }) {
+  const { t } = useLanguage();
   const specsData = [
     {
       category: '🛞 Wheel Lug Nut Torque Specs',
